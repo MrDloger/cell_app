@@ -17,9 +17,12 @@ import { onMounted, ref, useTemplateRef } from 'vue'
 const play = ref(true);
 const chance = ref(0.5)
 
-const SIZE_CELL = 3;
-const SIZE_WORLD = { x: 300, y: 300 };
+const SIZE_CELL = 2;
+const SIZE_WORLD = { x: 400, y: 400 };
 const SIZE_PAD = 0;
+const buffer = document.createElement('canvas').getContext('2d');
+buffer.canvas.width = SIZE_WORLD.x * SIZE_CELL;
+buffer.canvas.height = SIZE_WORLD.y * SIZE_CELL;
 
 
 
@@ -27,9 +30,9 @@ const countIteratorDiv = document.getElementById("countIterator")
 let ctx = null;
 onMounted(() => {
   const canvas = document.getElementById('canvas');
-  canvas.setAttribute('width', SIZE_WORLD.x * SIZE_CELL);
-  canvas.setAttribute('height', SIZE_WORLD.y * SIZE_CELL);
   ctx = canvas.getContext("2d");
+  ctx.canvas.width = SIZE_WORLD.x * SIZE_CELL;
+  ctx.canvas.height = SIZE_WORLD.y * SIZE_CELL;
   initWorld();
   showWorld();
   run();
@@ -41,18 +44,19 @@ let countIteratin = 0;
 
 const rect = (x, y, state) => {
   if (state) {
-    ctx.fillStyle = 'black';
-    ctx.fillRect(x * SIZE_CELL + SIZE_PAD, y * SIZE_CELL + SIZE_PAD, SIZE_CELL - SIZE_PAD, SIZE_CELL - SIZE_PAD);
+    buffer.fillStyle = 'black';
+    buffer.fillRect(x * SIZE_CELL + SIZE_PAD, y * SIZE_CELL + SIZE_PAD, SIZE_CELL - SIZE_PAD, SIZE_CELL - SIZE_PAD);
   }
 }
 const showWorld = () => {
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, 0, SIZE_WORLD.x * SIZE_CELL, SIZE_WORLD.y * SIZE_CELL)
+  buffer.fillStyle = 'white';
+  buffer.fillRect(0, 0, SIZE_WORLD.x * SIZE_CELL, SIZE_WORLD.y * SIZE_CELL)
   for (let x = 0; x < SIZE_WORLD.x; x++) {
     for (let y = 0; y < SIZE_WORLD.y; y++) {
       rect(x, y, world[x][y])
     }
   }
+  ctx.drawImage(buffer.canvas, 0, 0);
 }
 const initWorld = () => {
   world = [];
@@ -97,8 +101,6 @@ const nextState = () => {
 }
 const run = () => {
   setInterval(() => {
-    ctx.fillStyle = 'white'
-    ctx.fillRect(0, 0, SIZE_WORLD.x * SIZE_CELL, SIZE_WORLD.y * SIZE_CELL);
     if (play.value) {
       nextState();
     }
