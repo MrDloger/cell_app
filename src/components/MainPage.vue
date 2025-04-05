@@ -1,11 +1,24 @@
 <template>
   <canvas id="canvas"></canvas>
+  <div>
+    <button @click="initWorld">обновить</button>
+    <button @click="play = !play">старт/пауза</button>
+    <button @click="nextState">следующий фрейм</button>
+  </div>
+  <div>
+    <label for="chance">шанс</label>
+    <input type="number" id="chance" v-model="chance" step="0.1">
+  </div>
 </template>
 
 <script setup>
 import { onMounted, ref, useTemplateRef } from 'vue'
-const SIZE_CELL = 4;
-const SIZE_WORLD = { x: 350, y: 250 };
+
+const play = ref(true);
+const chance = ref(0.5)
+
+const SIZE_CELL = 3;
+const SIZE_WORLD = { x: 300, y: 300 };
 const SIZE_PAD = 0;
 
 
@@ -46,7 +59,7 @@ const initWorld = () => {
   for (let x = 0; x < SIZE_WORLD.x; x++) {
     let line = [];
     for (let y = 0; y < SIZE_WORLD.y; y++) {
-      line.push(Math.random() > 0.9);
+      line.push(Math.random() > chance.value);
     }
     world.push(line);
   }
@@ -86,7 +99,9 @@ const run = () => {
   setInterval(() => {
     ctx.fillStyle = 'white'
     ctx.fillRect(0, 0, SIZE_WORLD.x * SIZE_CELL, SIZE_WORLD.y * SIZE_CELL);
-    nextState();
+    if (play.value) {
+      nextState();
+    }
     showWorld();
     // countIteratorDiv.innerText = countIteratin++;
   }, 1)
