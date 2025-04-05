@@ -4,8 +4,8 @@
 
 <script setup>
 import { onMounted, ref, useTemplateRef } from 'vue'
-const SIZE_CELL = 3;
-const SIZE_WORLD = { x: 400, y: 300 };
+const SIZE_CELL = 4;
+const SIZE_WORLD = { x: 350, y: 250 };
 const SIZE_PAD = 0;
 
 
@@ -27,11 +27,14 @@ let world = [];
 let countIteratin = 0;
 
 const rect = (x, y, state) => {
-  ctx.fillStyle = state ? 'black' : 'white';
-  ctx.fillRect(x * SIZE_CELL + SIZE_PAD, y * SIZE_CELL + SIZE_PAD, SIZE_CELL - SIZE_PAD, SIZE_CELL - SIZE_PAD);
-
+  if (state) {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(x * SIZE_CELL + SIZE_PAD, y * SIZE_CELL + SIZE_PAD, SIZE_CELL - SIZE_PAD, SIZE_CELL - SIZE_PAD);
+  }
 }
 const showWorld = () => {
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, SIZE_WORLD.x * SIZE_CELL, SIZE_WORLD.y * SIZE_CELL)
   for (let x = 0; x < SIZE_WORLD.x; x++) {
     for (let y = 0; y < SIZE_WORLD.y; y++) {
       rect(x, y, world[x][y])
