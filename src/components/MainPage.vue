@@ -53,17 +53,17 @@ const initWorld = () => {
 }
 const checkCell = (x, y, state) => {
   let count = 0;
-  if (checkState(x - 1, y - 1, state)) count++;
+  if (checkState(x - 1, y - 1)) count++;
   if (checkState(x, y - 1)) count++;
-  if (checkState(x + 1, y - 1, state)) count++;
-  if (checkState(x - 1, y, state)) count++;
-  if (checkState(x + 1, y, state)) count++;
-  if (checkState(x - 1, y + 1, state)) count++;
-  if (checkState(x, y + 1, state)) count++;
-  if (checkState(x + 1, y + 1, state)) count++;
+  if (checkState(x + 1, y - 1)) count++;
+  if (checkState(x - 1, y)) count++;
+  if (checkState(x + 1, y,)) count++;
+  if (checkState(x - 1, y + 1)) count++;
+  if (checkState(x, y + 1)) count++;
+  if (checkState(x + 1, y + 1)) count++;
   return state ? count == 2 || count == 3 : count == 3;
 }
-const checkState = (x, y, state) => {
+const checkState = (x, y) => {
   if (x < 0) x = SIZE_WORLD.x - 1;
   if (x >= SIZE_WORLD.x) x = 0;
   if (y < 0) y = SIZE_WORLD.x - 1;
